@@ -36,15 +36,10 @@ const DEFAULT_SERIALIZE_OPTIONS = {
  * @returns {ReactElement}
  */
 function getScriptElement(state, serializeOptions) {
-  if (serializeOptions) {
-    serializeOptions = Object.assign(
-      {},
-      DEFAULT_SERIALIZE_OPTIONS,
-      serializeOptions,
-    );
-  }
-
-  const serializedState = serializeJavascript(state, serializeOptions);
+  const serializedState = serializeJavascript(
+    state,
+    Object.assign({}, DEFAULT_SERIALIZE_OPTIONS, serializeOptions),
+  );
 
   return (
     <script
