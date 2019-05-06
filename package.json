@@ -42,5 +42,10 @@
   "peerDependencies": {
     "react": "^16.8.6",
     "react-redux": "^7.0.3"
+  },
+  "homepage": "https://github.com/le0nik/gatsby-plugin-react-redux/tree/master#readme",
+  "repository": "https://github.com/le0nik/gatsby-plugin-react-redux",
+  "bugs": {
+    "url": "https://github.com/le0nik/gatsby-plugin-react-redux/issues"
   }
 }
