@@ -33,15 +33,15 @@
     "eslint-plugin-react": "^7.13.0",
     "eslint-plugin-react-hooks": "^1.6.0",
     "prettier": "^1.17.0",
-    "react": "^16.8.6",
-    "react-redux": "^7.0.3"
+    "react": "^16.8.0",
+    "react-redux": "^7.0.0 || ^7.1.0-alpha.0"
   },
   "dependencies": {
     "serialize-javascript": "^1.7.0"
   },
   "peerDependencies": {
-    "react": "^16.8.6",
-    "react-redux": "^7.0.3"
+    "react": "^16.8.0",
+    "react-redux": "^7.0.0 || ^7.1.0-alpha.0"
   },
   "homepage": "https://github.com/le0nik/gatsby-plugin-react-redux/tree/master#readme",
   "repository": "https://github.com/le0nik/gatsby-plugin-react-redux",
