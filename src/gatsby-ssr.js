@@ -15,8 +15,12 @@ export const wrapRootElement = ({ element, pathname }) => {
 
 export const onRenderBody = (
   { setHeadComponents, pathname },
-  pluginOptions = {},
+  pluginOptions,
 ) => {
+  if (process.env.BUILD_STAGE !== 'build-html') {
+    return;
+  }
+
   const store = storesByPaths.get(pathname);
   if (store) {
     const state = store.getState();
