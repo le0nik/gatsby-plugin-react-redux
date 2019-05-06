@@ -1,0 +1,31 @@
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+
+exports.onPreBootstrap = ({ store }, pluginOptions = {}) => {
+  const program = store.getState().program;
+  const { pathToCreateStoreModule } = pluginOptions;
+
+  if (!pathToCreateStoreModule) {
+    throw new Error(
+      '[gatsby-plugin-react-redux]: missing required option "pathToCreateStoreModule"',
+    );
+  }
+
+  let module = `module.exports = require("${
+    path.isAbsolute(pathToCreateStoreModule)
+      ? pathToCreateStoreModule
+      : path.join(program.directory, pathToCreateStoreModule)
+  }")`;
+  if (os.platform() === 'win32') {
+    module = module.split('\\').join('\\\\');
+  }
+
+  const dir = `${__dirname}/.tmp`;
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
+
+  fs.writeFileSync(`${dir}/createStore.js`, module);
+};
