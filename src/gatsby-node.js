@@ -12,6 +12,8 @@ exports.onPreBootstrap = ({ store }, pluginOptions = {}) => {
     );
   }
 
+  // Create a proxy file that imports user's `createStore` module
+  // We need it to have a static require on the client
   let module = `module.exports = require("${
     path.isAbsolute(pathToCreateStoreModule)
       ? pathToCreateStoreModule
