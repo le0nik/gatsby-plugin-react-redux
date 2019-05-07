@@ -4,12 +4,10 @@ import { useSelector, useDispatch } from 'react-redux';
 function MainPage() {
   const message = useSelector(state => state.message);
   const dispatch = useDispatch();
-  const handleSubmit = useCallback(
-    event => {
-      event.preventDefault();
-    },
-    [dispatch],
-  );
+
+  const handleSubmit = useCallback(event => {
+    event.preventDefault();
+  }, []);
 
   const handleChange = useCallback(
     event => {
