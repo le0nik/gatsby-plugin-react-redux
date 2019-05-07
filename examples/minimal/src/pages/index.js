@@ -31,7 +31,6 @@ function MainPage() {
             onChange={handleChange}
           />
         </p>
-        <button type="submit">Update</button>
       </form>
       <hr />
       <p>Message is: "{message}"</p>
