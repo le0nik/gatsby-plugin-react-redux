@@ -24,7 +24,7 @@ export const onRenderBody = (
   const store = storesByPaths.get(pathname);
   if (store) {
     const state = store.getState();
-    setHeadComponents([getScriptElement(state, pluginOptions.serialize)]);
+    setHeadComponents([getScriptElement(state, pluginOptions)]);
     storesByPaths.delete(pathname);
   }
 };
@@ -37,12 +37,14 @@ const DEFAULT_SERIALIZE_OPTIONS = {
 
 /**
  * @param {Object} state
+ * @param {Object} pluginOptions
+ * @param {Object} [pluginOptions.serialize]
  * @returns {ReactElement}
  */
-function getScriptElement(state, serializeOptions) {
+function getScriptElement(state, pluginOptions) {
   const serializedState = serializeJavascript(
     state,
-    Object.assign({}, DEFAULT_SERIALIZE_OPTIONS, serializeOptions),
+    Object.assign({}, DEFAULT_SERIALIZE_OPTIONS, pluginOptions.serialize),
   );
 
   return (
