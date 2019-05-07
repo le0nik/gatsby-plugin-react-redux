@@ -14,7 +14,7 @@
 
 ## How to use
 
-1. Create a module that exports a function which:
+**1**. Create module that exports a function which:
   - accepts a single argument `preloadedState`
   - creates `redux` store passing `preloadedState` as 2nd argument
   - returns created store
@@ -32,7 +32,7 @@ export default preloadedState => {
 };
 ```
 
-2. Edit `./gatsby-config.js`
+**2**. Edit `./gatsby-config.js`
 
  ```javascript
 module.exports = {
