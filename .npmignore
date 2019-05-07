@@ -69,12 +69,14 @@ lib
 *~
 *.swp
 *.swo
-/.idea
+.idea/
 
-/.babelrc
+/examples/
 /src/
-/.cache/
-/.tmp/
-/.eslintrc.js
-/.prettierrc
-/.editorconfig
+.cache/
+.tmp/
+
+.babelrc
+.eslintrc*
+.prettierrc
+.editorconfig

@@ -1,0 +1,19 @@
+{
+  "name": "example-minimal",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npm run develop",
+    "develop": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve"
+  },
+  "dependencies": {
+    "gatsby": "^2.4.2",
+    "gatsby-plugin-react-redux": "^1.0.5-beta.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.1.0-alpha.4",
+    "redux": "^4.0.1"
+  }
+}

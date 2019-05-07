@@ -1,6 +1,6 @@
 {
   "name": "gatsby-plugin-react-redux",
-  "version": "1.0.4",
+  "version": "1.0.5-beta.0",
   "description": "Gatsby plugin for React-Redux with built-in server-side rendering support",
   "keywords": [
     "gatsby",
@@ -17,7 +17,7 @@
     "watch": "babel -w src --out-dir . --ignore **/__tests__",
     "test": "jest",
     "test:watch": "npm run test -- --watch",
-    "format": "prettier --write src/**/*.{js,jsx}",
+    "format": "prettier --write {src,examples}/**/*.{js,jsx}",
     "lint": "eslint ./src"
   },
   "author": "Leonid Nikiforenko <leo.nikiforenko@gmail.com>",
@@ -53,5 +53,8 @@
   "repository": "https://github.com/le0nik/gatsby-plugin-react-redux",
   "bugs": {
     "url": "https://github.com/le0nik/gatsby-plugin-react-redux/issues"
+  },
+  "jest": {
+    "roots": ["<rootDir>/src"]
   }
 }

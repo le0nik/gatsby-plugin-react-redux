@@ -68,11 +68,14 @@ lib
 *~
 *.swp
 *.swo
-/.idea
+.idea/
+
+.cache/
+.tmp/
+public/
 
 /gatsby-browser.js
 /gatsby-ssr.js
 /gatsby-node.js
 /constants.js
-/.cache/
-/.tmp/
+
