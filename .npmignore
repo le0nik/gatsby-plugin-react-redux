@@ -65,10 +65,16 @@ lib
 
 .DS_Store
 
-/.idea/
+
+*~
+*.swp
+*.swo
+/.idea
+
 /.babelrc
 /src/
 /.cache/
 /.tmp/
 /.eslintrc.js
 /.prettierrc
+/.editorconfig

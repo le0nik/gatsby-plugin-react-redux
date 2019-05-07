@@ -47,6 +47,7 @@ function getScriptElement(state, serializeOptions) {
 
   return (
     <script
+      key="redux-state"
       id={ELEMENT_ID}
       dangerouslySetInnerHTML={{
         __html: `window['${GLOBAL_KEY}'] = ${serializedState}`,

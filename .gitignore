@@ -74,6 +74,5 @@ lib
 /gatsby-ssr.js
 /gatsby-node.js
 /constants.js
-/.cache
-/.tmp
-
+/.cache/
+/.tmp/
