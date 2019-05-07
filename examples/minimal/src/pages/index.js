@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 function MainPage() {
-  const message = useSelector(state => state.message);
+  const message = useSelector(state => state.message, []);
   const dispatch = useDispatch();
 
   const handleSubmit = useCallback(event => {
