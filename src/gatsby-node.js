@@ -1,19 +1,24 @@
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
+import fs from 'fs';
+import path from 'path';
+import os from 'os';
+import util from 'util';
 
-exports.onPreBootstrap = ({ store }, pluginOptions = {}) => {
-  const program = store.getState().program;
-  const { pathToCreateStoreModule } = pluginOptions;
+const mkdirAsync = util.promisify(fs.mkdir);
+const writeFileAsync = util.promisify(fs.writeFile);
 
+export const onPreBootstrap = async (
+  { store },
+  { pathToCreateStoreModule },
+) => {
   if (!pathToCreateStoreModule) {
     throw new Error(
       '[gatsby-plugin-react-redux]: missing required option "pathToCreateStoreModule"',
     );
   }
 
-  // Create a proxy file that imports user's `createStore` module
-  // We need it to have a static require on the client
+  const { program } = store.getState();
+  // Create proxy file that imports user's `createStore` module
+  // We need it to have static require on the client
   let module = `module.exports = require("${
     path.isAbsolute(pathToCreateStoreModule)
       ? pathToCreateStoreModule
@@ -26,8 +31,8 @@ exports.onPreBootstrap = ({ store }, pluginOptions = {}) => {
   const dir = `${__dirname}/.tmp`;
 
   if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir);
+    await mkdirAsync(dir);
   }
 
-  fs.writeFileSync(`${dir}/createStore.js`, module);
+  return writeFileAsync(`${dir}/createStore.js`, module);
 };
