@@ -6,10 +6,7 @@ import util from 'util';
 const mkdirAsync = util.promisify(fs.mkdir);
 const writeFileAsync = util.promisify(fs.writeFile);
 
-export const onPreBootstrap = async (
-  { store },
-  { pathToCreateStoreModule },
-) => {
+export const onPreBootstrap = ({ store }, { pathToCreateStoreModule }) => {
   if (!pathToCreateStoreModule) {
     throw new Error(
       '[gatsby-plugin-react-redux]: missing required option "pathToCreateStoreModule"',
@@ -30,9 +27,10 @@ export const onPreBootstrap = async (
 
   const dir = `${__dirname}/.tmp`;
 
+  let promise = Promise.resolve(null);
   if (!fs.existsSync(dir)) {
-    await mkdirAsync(dir);
+    promise = promise.then(() => mkdirAsync(dir));
   }
 
-  return writeFileAsync(`${dir}/createStore.js`, module);
+  return promise.then(() => writeFileAsync(`${dir}/createStore.js`, module));
 };
