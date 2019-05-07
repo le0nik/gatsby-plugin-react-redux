@@ -1,6 +1,6 @@
 {
   "name": "gatsby-plugin-react-redux",
-  "version": "1.0.5-beta.0",
+  "version": "1.0.5",
   "description": "Gatsby plugin for React-Redux with built-in server-side rendering support",
   "keywords": [
     "gatsby",
@@ -55,6 +55,8 @@
     "url": "https://github.com/le0nik/gatsby-plugin-react-redux/issues"
   },
   "jest": {
-    "roots": ["<rootDir>/src"]
+    "roots": [
+      "<rootDir>/src"
+    ]
   }
 }
