@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+<a name="1.0.6"></a>
+# [1.0.6](https://github.com/le0nik/gatsby-plugin-react-redux/compare/v1.0.5...v1.0.6) (2019-05-08)
+
+- Small fixes for minimal example
+
 <a name="1.0.5"></a>
 # [1.0.5](https://github.com/le0nik/gatsby-plugin-react-redux/compare/v1.0.4...v1.0.5) (2019-05-08)
 
