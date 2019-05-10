@@ -23,28 +23,21 @@ export const onRenderBody = (
 
   const store = storesByPaths.get(pathname);
   if (store) {
-    const state = store.getState();
-    setHeadComponents([getScriptElement(state, pluginOptions)]);
+    setHeadComponents([getScriptElement(store, pluginOptions)]);
     storesByPaths.delete(pathname);
   }
 };
 
-const DEFAULT_SERIALIZE_OPTIONS = {
-  space: 0,
-  isJSON: true,
-  unsafe: false,
-};
-
 /**
- * @param {Object} state
+ * @param {Object} store - redux store
  * @param {Object} pluginOptions
  * @param {Object} [pluginOptions.serialize]
  * @returns {ReactElement}
  */
-function getScriptElement(state, pluginOptions) {
-  const serializedState = serializeJavascript(
-    state,
-    Object.assign({}, DEFAULT_SERIALIZE_OPTIONS, pluginOptions.serialize),
+function getScriptElement(store, pluginOptions) {
+  const serializedState = serializeState(
+    store.getState(),
+    pluginOptions.serialize,
   );
 
   return (
@@ -55,5 +48,23 @@ function getScriptElement(state, pluginOptions) {
         __html: `window['${GLOBAL_KEY}'] = ${serializedState}`,
       }}
     />
+  );
+}
+
+const DEFAULT_SERIALIZE_OPTIONS = {
+  space: 0,
+  isJSON: true,
+  unsafe: false,
+};
+
+/**
+ * @param {Object} state
+ * @param {Object} options
+ * @returns {string}
+ */
+function serializeState(state, options) {
+  return serializeJavascript(
+    state,
+    Object.assign({}, DEFAULT_SERIALIZE_OPTIONS, options),
   );
 }
