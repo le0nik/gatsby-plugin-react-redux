@@ -1,3 +1,5 @@
+import React from 'react';
+
 const mockCreateStore = (storeState = {}) => {
   const mockFn = jest.fn(() => ({
     getState: () => storeState,
@@ -94,39 +96,30 @@ describe('wrapRootElement', () => {
       Provider,
     }));
 
-    const createElement = jest.fn();
-    jest.doMock('react', () => ({
-      createElement,
-    }));
-
-    const children = { key: 'children' };
+    const children = <div>Hello World</div>;
 
     const { wrapRootElement } = require('../gatsby-ssr');
-    wrapRootElement({ element: children });
+    const result = wrapRootElement({ element: children });
 
     return {
+      result,
       children,
       Provider,
       createStore,
-      createElement,
     };
   };
 
   it('calls `createStore` function', () => {
     const mocked = setup();
-
     expect(mocked.createStore).toHaveBeenCalledTimes(1);
   });
 
   it('renders `Provider` component with correct props and children', () => {
     const mocked = setup();
-
     const store = mocked.createStore.mock.results[0].value;
-    expect(mocked.createElement).toHaveBeenCalledTimes(1);
-    expect(mocked.createElement).toHaveBeenCalledWith(
-      mocked.Provider,
-      expect.objectContaining({ store }),
-      mocked.children,
-    );
+
+    expect(mocked.result.type).toBe(mocked.Provider);
+    expect(mocked.result.props.store).toBe(store);
+    expect(mocked.result.props.children).toEqual(mocked.children);
   });
 });

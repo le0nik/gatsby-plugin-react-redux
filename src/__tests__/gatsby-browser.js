@@ -1,3 +1,4 @@
+import React from 'react';
 import { ELEMENT_ID, GLOBAL_KEY } from '../constants';
 
 const mockCreateStore = (storeState = {}) => {
@@ -76,7 +77,12 @@ describe('onInitialClientRender', () => {
 
 describe('wrapRootElement', () => {
   beforeEach(() => {
+    delete window[GLOBAL_KEY];
     jest.resetModules();
+  });
+
+  afterAll(() => {
+    delete window[GLOBAL_KEY];
   });
 
   const setup = preloadedState => {
@@ -87,21 +93,16 @@ describe('wrapRootElement', () => {
     const Provider = jest.fn();
     jest.doMock('react-redux', () => ({ Provider }));
 
-    const createElement = jest.fn();
-    jest.doMock('react', () => ({
-      createElement,
-    }));
-
-    const children = { key: 'children' };
+    const children = <div>Hello</div>;
 
     const { wrapRootElement } = require('../gatsby-browser');
-    wrapRootElement({ element: children });
+    const result = wrapRootElement({ element: children });
 
     return {
+      result,
       children,
       Provider,
       createStore,
-      createElement,
     };
   };
 
@@ -118,11 +119,8 @@ describe('wrapRootElement', () => {
     const mocked = setup(preloadedState);
     const store = mocked.createStore.mock.results[0].value;
 
-    expect(mocked.createElement).toHaveBeenCalledTimes(1);
-    expect(mocked.createElement).toHaveBeenCalledWith(
-      mocked.Provider,
-      expect.objectContaining({ store }),
-      mocked.children,
-    );
+    expect(mocked.result.type).toBe(mocked.Provider);
+    expect(mocked.result.props.store).toBe(store);
+    expect(mocked.result.props.children).toBe(mocked.children);
   });
 });
