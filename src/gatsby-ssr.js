@@ -23,33 +23,11 @@ export const onRenderBody = (
 
   const store = storesByPaths.get(pathname);
   if (store) {
-    setHeadComponents([getScriptElement(store, pluginOptions)]);
+    const serializedState = serializeStore(store, pluginOptions.serialize);
+    setHeadComponents([renderScriptElement(serializedState)]);
     storesByPaths.delete(pathname);
   }
 };
-
-/**
- * @param {Object} store - redux store
- * @param {Object} pluginOptions
- * @param {Object} [pluginOptions.serialize]
- * @returns {ReactElement}
- */
-function getScriptElement(store, pluginOptions) {
-  const serializedState = serializeState(
-    store.getState(),
-    pluginOptions.serialize,
-  );
-
-  return (
-    <script
-      key="redux-state"
-      id={ELEMENT_ID}
-      dangerouslySetInnerHTML={{
-        __html: `window['${GLOBAL_KEY}'] = ${serializedState}`,
-      }}
-    />
-  );
-}
 
 const DEFAULT_SERIALIZE_OPTIONS = {
   space: 0,
@@ -58,13 +36,29 @@ const DEFAULT_SERIALIZE_OPTIONS = {
 };
 
 /**
- * @param {Object} state
- * @param {Object} options
+ * @param {Object} store - redux store
+ * @param {Object} [options]
  * @returns {string}
  */
-function serializeState(state, options) {
-  return serializeJavascript(
-    state,
-    Object.assign({}, DEFAULT_SERIALIZE_OPTIONS, options),
+function serializeStore(store, options) {
+  return serializeJavascript(store.getState(), {
+    ...DEFAULT_SERIALIZE_OPTIONS,
+    ...options,
+  });
+}
+
+/**
+ * @param {string} serializedState
+ * @returns {ReactElement}
+ */
+function renderScriptElement(serializedState) {
+  return (
+    <script
+      key="redux-state"
+      id={ELEMENT_ID}
+      dangerouslySetInnerHTML={{
+        __html: `window['${GLOBAL_KEY}'] = ${serializedState}`,
+      }}
+    />
   );
 }
