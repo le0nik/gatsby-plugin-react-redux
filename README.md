@@ -6,35 +6,12 @@
 
 ## Install
 
-`npm install --save gatsby-plugin-react-redux`
-
-## What it does
-- Wraps your app with redux `Provider` on both client and server
-- Securely serializes store state with [serialize-javascript](https://github.com/yahoo/serialize-javascript) on the server and passes it to your `createStore` function on the client
+`npm install --save gatsby-plugin-react-redux react-redux redux`
 
 ## How to use
 
-**1**. Create module that exports a function which:
-  - accepts a single argument `preloadedState`
-  - creates `redux` store passing `preloadedState` as 2nd argument
-  - returns created store
-
-Example:
-
-`./src/state/createStore.js`
+`./gatsby-config.js`
 ```javascript
-import { createStore } from 'redux';
-import reducer from './reducer';
-
-// For ES5 use `module.exports`
-export default preloadedState => {
-  return createStore(reducer, preloadedState);
-};
-```
-
-**2**. Edit `./gatsby-config.js`
-
- ```javascript
 module.exports = {
   plugins: [
     {
@@ -54,7 +31,21 @@ module.exports = {
     },
   ],
 };
- ```
+```
+
+`./src/state/createStore.js` // same path you provided in gatsby-config
+```javascript
+import { createStore } from 'redux';
+
+function reducer() {
+  //...
+}
+
+// preloadedState will be passed to you by the plugin
+export default preloadedState => {
+  return createStore(reducer, preloadedState);
+};
+```
 
 ## License
 
