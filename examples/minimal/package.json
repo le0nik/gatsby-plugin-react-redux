@@ -9,11 +9,11 @@
     "serve": "gatsby serve"
   },
   "dependencies": {
-    "gatsby": "^2.4.2",
-    "gatsby-plugin-react-redux": "^1.0.5-beta.0",
+    "gatsby": "^2.10.5",
+    "gatsby-plugin-react-redux": "^1.0.9",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-redux": "^7.1.0-alpha.4",
+    "react-redux": "^7.1.0",
     "redux": "^4.0.1"
   }
 }
