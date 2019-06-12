@@ -10,6 +10,21 @@
 
 ## How to use
 
+
+`./src/state/createStore.js` // same path you provided in gatsby-config
+```javascript
+import { createStore } from 'redux';
+
+function reducer() {
+  //...
+}
+
+// preloadedState will be passed in by the plugin
+export default preloadedState => {
+  return createStore(reducer, preloadedState);
+};
+```
+
 `./gatsby-config.js`
 ```javascript
 module.exports = {
@@ -17,7 +32,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-react-redux`,
       options: {
-        // [required] - path to module you created in step 1
+        // [required] - path to your createStore module
         pathToCreateStoreModule: './src/state/createStore',
         // [optional] - options passed to `serialize-javascript`
         // info: https://github.com/yahoo/serialize-javascript#options
@@ -30,20 +45,6 @@ module.exports = {
       },
     },
   ],
-};
-```
-
-`./src/state/createStore.js` // same path you provided in gatsby-config
-```javascript
-import { createStore } from 'redux';
-
-function reducer() {
-  //...
-}
-
-// preloadedState will be passed to you by the plugin
-export default preloadedState => {
-  return createStore(reducer, preloadedState);
 };
 ```
 
