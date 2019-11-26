@@ -1,5 +1,5 @@
 import React from 'react';
-import { ELEMENT_ID, GLOBAL_KEY } from '../constants';
+import { DEFAULT_OPTIONS, SCRIPT_ELEMENT_ID } from '../constants';
 
 const mockCreateStore = (storeState = {}) => {
   const mockFn = jest.fn(() => ({
@@ -11,82 +11,76 @@ const mockCreateStore = (storeState = {}) => {
 };
 
 describe('onInitialClientRender', () => {
-  const originalGetElementById = document.getElementById;
-  const restoreDocument = () => {
-    Object.defineProperty(document, 'getElementById', {
-      value: originalGetElementById,
-      writable: true,
-    });
-  };
-
   beforeEach(() => {
     jest.resetModules();
   });
 
-  afterAll(() => {
+  afterEach(() => {
     delete process.env.BUILD_STAGE;
-    restoreDocument();
+    const element = document.getElementById(SCRIPT_ELEMENT_ID);
+    if (element) document.head.removeChild(element);
   });
 
-  const setup = ({ env = 'build-javascript' } = {}) => {
+  const setup = ({ env, pluginOptions } = {}) => {
     process.env.BUILD_STAGE = env;
+    const storeState = { redux: 'store' };
 
-    mockCreateStore({ redux: 'store' });
+    const element = document.createElement('script');
+    element.id = SCRIPT_ELEMENT_ID;
+    document.head.appendChild(element);
 
-    const element = {
-      parentNode: {
-        removeChild: jest.fn(),
-      },
-    };
-    const getElementById = jest.fn(() => element);
+    window[DEFAULT_OPTIONS.windowKey] = storeState;
+
+    mockCreateStore(storeState);
 
     jest.doMock('react-redux', () => ({
       Provider: () => ({}),
     }));
 
-    Object.defineProperty(document, 'getElementById', {
-      value: getElementById,
-      writable: true,
-    });
-
     const { onInitialClientRender } = require('../gatsby-browser');
-    onInitialClientRender();
+    onInitialClientRender(null, pluginOptions);
 
-    return {
-      element,
-      getElementById,
-    };
+    return { element };
   };
 
-  it('removes dom element with serialized redux state', () => {
-    const mocked = setup();
+  it('cleans up on client if cleanupOnClient is true and BUILD_STAGE is build-javascript', () => {
+    setup({ env: 'build-javascript' });
+    expect(document.getElementById(SCRIPT_ELEMENT_ID)).toBe(null);
+    expect(typeof window[DEFAULT_OPTIONS.windowKey] === 'undefined').toBe(true);
+  });
 
-    expect(mocked.getElementById).toHaveBeenCalledWith(ELEMENT_ID);
-    expect(mocked.element.parentNode.removeChild).toHaveBeenCalledWith(
-      mocked.element,
+  it('does not clean up if BUILD_STAGE is not build-javascript', () => {
+    const mocked = setup({ env: 'develop' });
+    expect(document.getElementById(SCRIPT_ELEMENT_ID)).toBe(mocked.element);
+    expect(typeof window[DEFAULT_OPTIONS.windowKey] === 'undefined').toBe(
+      false,
     );
   });
 
-  it('only removes element when BUILD_STAGE is build-javascript', () => {
-    const mocked = setup({ env: 'develop' });
-
-    expect(mocked.getElementById).not.toHaveBeenCalled();
-    expect(mocked.element.parentNode.removeChild).not.toHaveBeenCalled();
+  it('does not clean up if cleanupOnClient is not true', () => {
+    const mocked = setup({
+      env: 'build-javascript',
+      pluginOptions: { cleanupOnClient: false },
+    });
+    expect(document.getElementById(SCRIPT_ELEMENT_ID)).toBe(mocked.element);
+    expect(typeof window[DEFAULT_OPTIONS.windowKey] === 'undefined').toBe(
+      false,
+    );
   });
 });
 
 describe('wrapRootElement', () => {
   beforeEach(() => {
-    delete window[GLOBAL_KEY];
+    delete window[DEFAULT_OPTIONS.windowKey];
     jest.resetModules();
   });
 
   afterAll(() => {
-    delete window[GLOBAL_KEY];
+    delete window[DEFAULT_OPTIONS.windowKey];
   });
 
   const setup = preloadedState => {
-    window[GLOBAL_KEY] = preloadedState;
+    window[DEFAULT_OPTIONS.windowKey] = preloadedState;
 
     const createStore = mockCreateStore(preloadedState);
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import serializeJavascript from 'serialize-javascript';
 import createStore from './.tmp/createStore';
-import { ELEMENT_ID, GLOBAL_KEY } from './constants';
+import { DEFAULT_OPTIONS, SCRIPT_ELEMENT_ID } from './constants';
 
 const storesByPaths = new Map();
 
@@ -15,50 +15,32 @@ export const wrapRootElement = ({ element, pathname }) => {
 
 export const onRenderBody = (
   { setHeadComponents, pathname },
-  pluginOptions,
+  pluginOptions = {},
 ) => {
   if (process.env.BUILD_STAGE !== 'build-html') {
     return;
   }
 
   const store = storesByPaths.get(pathname);
-  if (store) {
-    const serializedState = serializeStore(store, pluginOptions.serialize);
-    setHeadComponents([renderScriptElement(serializedState)]);
-    storesByPaths.delete(pathname);
-  }
-};
+  if (!store) return;
 
-const DEFAULT_SERIALIZE_OPTIONS = {
-  space: 0,
-  isJSON: true,
-  unsafe: false,
-};
+  const options = { ...DEFAULT_OPTIONS, ...pluginOptions };
 
-/**
- * @param {Object} store - redux store
- * @param {Object} [options]
- * @returns {string}
- */
-function serializeStore(store, options) {
-  return serializeJavascript(store.getState(), {
-    ...DEFAULT_SERIALIZE_OPTIONS,
-    ...options,
-  });
-}
+  const serializedState = serializeJavascript(
+    store.getState(),
+    options.serialize,
+  ).replace(/'/g, "\\'"); // escape single quotes inside because we wrap it in them
 
-/**
- * @param {string} serializedState
- * @returns {ReactElement}
- */
-function renderScriptElement(serializedState) {
-  return (
+  const parseFn = options.serialize.isJSON ? 'JSON.parse' : 'eval';
+
+  setHeadComponents([
     <script
       key="redux-state"
-      id={ELEMENT_ID}
+      id={SCRIPT_ELEMENT_ID}
       dangerouslySetInnerHTML={{
-        __html: `window['${GLOBAL_KEY}'] = ${serializedState}`,
+        __html: `window['${options.windowKey}'] = ${parseFn}('${serializedState}')`,
       }}
-    />
-  );
-}
+    />,
+  ]);
+  storesByPaths.delete(pathname);
+};

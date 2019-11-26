@@ -6,7 +6,7 @@ import util from 'util';
 const mkdirAsync = util.promisify(fs.mkdir);
 const writeFileAsync = util.promisify(fs.writeFile);
 
-export const onPreBootstrap = ({ store }, { pathToCreateStoreModule }) => {
+export const onPreBootstrap = ({ store }, { pathToCreateStoreModule } = {}) => {
   if (!pathToCreateStoreModule) {
     throw new Error(
       '[gatsby-plugin-react-redux]: missing required option "pathToCreateStoreModule"',
