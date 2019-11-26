@@ -3,5 +3,8 @@
     ["babel-preset-gatsby-package", {
       "browser": true
     }]
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-nullish-coalescing-operator"
   ]
 }
