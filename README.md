@@ -10,7 +10,6 @@
 
 ## How to use
 
-
 `./src/state/createStore.js` // same path you provided in gatsby-config
 ```javascript
 import { createStore } from 'redux';
@@ -42,6 +41,10 @@ module.exports = {
           isJSON: true,
           unsafe: false,
         },
+        // [optional] - if true will clean up after itself on the client, default:
+        cleanupOnClient: true,
+        // [optional] - name of key on `window` where serialized state will be stored, default:
+        windowKey: '__PRELOADED_STATE__',
       },
     },
   ],
