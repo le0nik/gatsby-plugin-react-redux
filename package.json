@@ -23,7 +23,7 @@
   "author": "Leonid Nikiforenko <leo.nikiforenko@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "serialize-javascript": "^1.7.0"
+    "serialize-javascript": "^2.1.1"
   },
   "peerDependencies": {
     "react": "*",
