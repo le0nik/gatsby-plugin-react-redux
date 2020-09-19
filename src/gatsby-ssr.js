@@ -4,11 +4,11 @@ import serializeJavascript from 'serialize-javascript';
 import createStore from './.tmp/createStore';
 import { DEFAULT_OPTIONS, SCRIPT_ELEMENT_ID } from './constants';
 
-const storesByPaths = new Map();
+const pageStores = new Map();
 
 export const wrapRootElement = ({ element, pathname }) => {
   const store = createStore();
-  storesByPaths.set(pathname, store);
+  pageStores.set(pathname, store);
 
   return <Provider store={store}>{element}</Provider>;
 };
@@ -17,30 +17,35 @@ export const onRenderBody = (
   { setHeadComponents, pathname },
   pluginOptions = {},
 ) => {
-  if (process.env.BUILD_STAGE !== 'build-html') {
-    return;
-  }
+  const pageStore = pageStores.get(pathname);
 
-  const store = storesByPaths.get(pathname);
-  if (!store) return;
+  if (!pageStore) return;
 
-  const options = { ...DEFAULT_OPTIONS, ...pluginOptions };
+  pageStores.delete(pathname);
+
+  const options = {
+    ...DEFAULT_OPTIONS,
+    ...pluginOptions,
+    serialize: {
+      ...DEFAULT_OPTIONS.serialize,
+      ...pluginOptions.serialize,
+    },
+  };
 
   const serializedState = serializeJavascript(
-    store.getState(),
+    pageStore.getState(),
     options.serialize,
   ).replace(/'/g, "\\'"); // escape single quotes inside because we wrap it in them
 
-  const parseFn = options.serialize.isJSON ? 'JSON.parse' : 'eval';
+  const { isJSON } = options.serialize;
 
   setHeadComponents([
     <script
       key="redux-state"
       id={SCRIPT_ELEMENT_ID}
       dangerouslySetInnerHTML={{
-        __html: `window['${options.windowKey}'] = ${parseFn}('${serializedState}')`,
+        __html: `window['${options.windowKey}'] = ${isJSON ? `JSON.parse('${serializedState}')` : `eval('(${serializedState})')`}`,
       }}
     />,
   ]);
-  storesByPaths.delete(pathname);
 };

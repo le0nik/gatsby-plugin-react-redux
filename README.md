@@ -38,8 +38,11 @@ module.exports = {
         // will be merged with these defaults:
         serialize: {
           space: 0,
+          // if `isJSON` is set to `false`, `eval` is used to deserialize redux state,
+          // otherwise `JSON.parse` is used
           isJSON: true,
           unsafe: false,
+          ignoreFunction: true,
         },
         // [optional] - if true will clean up after itself on the client, default:
         cleanupOnClient: true,

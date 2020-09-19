@@ -4,13 +4,9 @@
 
 `npm install`
 
-## Start dev server
-
-`npm start`
-
 ## Start production server
 
-`npm run build && npm run serve`
+`npm start`
 
 ## Check hydrated state in production build
 

@@ -4,23 +4,21 @@ import createStore from './.tmp/createStore';
 import { DEFAULT_OPTIONS, SCRIPT_ELEMENT_ID } from './constants';
 
 export const wrapRootElement = ({ element }, pluginOptions = {}) => {
-  const options = { ...DEFAULT_OPTIONS, ...pluginOptions };
-  const preloadedState = window[options.windowKey];
+  const preloadedState = window[pluginOptions.windowKey ?? DEFAULT_OPTIONS.windowKey];
   const store = createStore(preloadedState);
 
   return <Provider store={store}>{element}</Provider>;
 };
 
 export const onInitialClientRender = (_, pluginOptions = {}) => {
-  const options = { ...DEFAULT_OPTIONS, ...pluginOptions };
+  const shouldCleanup = Boolean(pluginOptions.cleanupOnClient ?? DEFAULT_OPTIONS.cleanupOnClient);
+  if (shouldCleanup) {
+    const windowKey = pluginOptions.windowKey ?? DEFAULT_OPTIONS.windowKey;
+    delete window[windowKey];
 
-  if (process.env.BUILD_STAGE !== 'build-javascript') return;
-  if (!options.cleanupOnClient) return;
-
-  delete window[options.windowKey];
-
-  const preloadedStateEl = document.getElementById(SCRIPT_ELEMENT_ID);
-  if (preloadedStateEl) {
-    preloadedStateEl.parentNode.removeChild(preloadedStateEl);
+    const preloadedStateEl = document.getElementById(SCRIPT_ELEMENT_ID);
+    if (preloadedStateEl) {
+      preloadedStateEl.parentNode.removeChild(preloadedStateEl);
+    }
   }
 };

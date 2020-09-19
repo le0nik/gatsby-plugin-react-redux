@@ -5,6 +5,7 @@ export const DEFAULT_OPTIONS = {
     space: 0,
     isJSON: true,
     unsafe: false,
+    ignoreFunction: true,
   },
   cleanupOnClient: true,
   windowKey: '__PRELOADED_STATE__',

@@ -3,17 +3,19 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "start": "npm run develop",
-    "develop": "gatsby develop",
-    "build": "gatsby build",
+    "start": "npm run build && npm run serve",
+    "build": "rimraf -rf ./public && gatsby build",
     "serve": "gatsby serve"
   },
   "dependencies": {
-    "gatsby": "^2.10.5",
-    "gatsby-plugin-react-redux": "^1.0.9",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-redux": "^7.1.0",
-    "redux": "^4.0.1"
+    "gatsby": "^2.24.63",
+    "gatsby-plugin-react-redux": "^1.1.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.1",
+    "redux": "^4.0.5"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2"
   }
 }

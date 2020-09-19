@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 
 <a name="1.0.10"></a>
+# [1.1.0](https://github.com/le0nik/gatsby-plugin-react-redux/compare/v1.0.10...v1.1.0) (2020-09-20)
+
+- Add `options.windowKey` - sets preloaded state to this key on `window` (default: `__PRELOADED_STATE__`)
+- Add `options.cleanupOnClient` - if `true` removes preloaded state from `window` after page load (default: `true`)
+- Support `serialize-javascript@5`
+
+<a name="1.0.10"></a>
 # [1.0.10](https://github.com/le0nik/gatsby-plugin-react-redux/compare/v1.0.9...v1.0.10) (2019-06-26)
 
 - Update dependencies
